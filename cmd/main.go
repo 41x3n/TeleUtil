@@ -2,18 +2,17 @@ package main
 
 import (
 	"github.com/41x3n/TeleUtil/bootstrap"
+	"github.com/41x3n/TeleUtil/bot"
 )
 
 func main() {
 
 	app := bootstrap.App()
 
-	// env := app.Env
-	// db := app.Postgres
-	// bot := app.Bot
-
 	defer app.CloseDBConnection()
 
-	app.HandleBotUpdates()
+	app.AutoMigrate()
+
+	bot.HandleUpdates(&app)
 
 }

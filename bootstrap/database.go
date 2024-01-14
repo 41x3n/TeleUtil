@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"log"
 
+	"github.com/41x3n/TeleUtil/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -18,6 +19,15 @@ func NewPostgresDatabase(env *Env) *gorm.DB {
 	log.Println("Connection to PostgreSQL established.")
 
 	return client
+}
+
+func AutoMigrate(client *gorm.DB) {
+	err := client.AutoMigrate(&domain.User{})
+	if err != nil {
+		panic("Failed to auto migrate: " + err.Error())
+	}
+
+	log.Println("Auto migration completed.")
 }
 
 func ClosePostgresDBConnection(client *gorm.DB) {

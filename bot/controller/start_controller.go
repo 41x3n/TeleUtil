@@ -1,7 +1,29 @@
 package controller
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	"context"
+	"time"
 
-func StartController(msg *tgbotapi.MessageConfig) {
-	msg.Text = "Welcome to TeleUtil. This bot is still in progress."
+	"github.com/41x3n/TeleUtil/domain"
+)
+
+type StartController struct {
+	userRepository domain.UserRepository
+}
+
+func NewStartController(ur domain.UserRepository) *StartController {
+	return &StartController{
+		userRepository: ur,
+	}
+}
+
+func (sc *StartController) Run(user *domain.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := sc.userRepository.GetOrCreateByUserID(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }

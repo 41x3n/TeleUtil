@@ -18,10 +18,10 @@ func App() Application {
 	return *app
 }
 
-func (app *Application) CloseDBConnection() {
-	ClosePostgresDBConnection(app.Postgres)
+func (app *Application) AutoMigrate() {
+	AutoMigrate(app.Postgres)
 }
 
-func (app *Application) HandleBotUpdates() {
-	HandleUpdates(app.Bot)
+func (app *Application) CloseDBConnection() {
+	ClosePostgresDBConnection(app.Postgres)
 }

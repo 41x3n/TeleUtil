@@ -1,7 +1,29 @@
 package controller
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	"context"
+	"time"
 
-func HelpController(msg *tgbotapi.MessageConfig) {
-	msg.Text = "In progress. We will list down everything that you need to know about this bot."
+	"github.com/41x3n/TeleUtil/domain"
+)
+
+type HelpController struct {
+	userRepository domain.UserRepository
+}
+
+func NewHelpController(ur domain.UserRepository) *HelpController {
+	return &HelpController{
+		userRepository: ur,
+	}
+}
+
+func (sc *HelpController) Run(user *domain.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := sc.userRepository.GetOrCreateByUserID(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }
