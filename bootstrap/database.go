@@ -22,7 +22,7 @@ func NewPostgresDatabase(env *Env) *gorm.DB {
 }
 
 func AutoMigrate(client *gorm.DB) {
-	err := client.AutoMigrate(&domain.User{})
+	err := client.AutoMigrate(&domain.User{}, &domain.Photo{})
 	if err != nil {
 		panic("Failed to auto migrate: " + err.Error())
 	}

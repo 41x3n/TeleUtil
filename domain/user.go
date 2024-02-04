@@ -12,19 +12,20 @@ const (
 
 type User struct {
 	gorm.Model
-	UserID       int64  `gorm:"not null"`
+	TelegramID   int64  `gorm:"primaryKey;unique"`
 	IsBot        bool   `gorm:"not null"`
 	FirstName    string `gorm:"not null"`
 	LastName     *string
 	UserName     *string
 	LanguageCode *string
-	IsActive     bool `gorm:"default:true"`
+	IsActive     bool    `gorm:"default:true"`
+	Photos       []Photo `gorm:"foreignKey:UserTelegramID;references:TelegramID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
 
 type UserRepository interface {
 	Create(c context.Context, user *User) error
 	Fetch(c context.Context) ([]User, error)
 	GetByUserName(c context.Context, username string) (User, error)
-	GetByID(c context.Context, userID int) (User, error)
-	GetOrCreateByUserID(c context.Context, user *User) (User, error)
+	GetByID(c context.Context, telegramID int64) (User, error)
+	GetOrCreateByUserTelegramID(c context.Context, user *User) (User, error)
 }
