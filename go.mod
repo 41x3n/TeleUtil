@@ -2,7 +2,10 @@ module github.com/41x3n/TeleUtil
 
 go 1.20
 
-require gorm.io/gorm v1.25.5
+require (
+	github.com/rabbitmq/amqp091-go v1.9.0
+	gorm.io/gorm v1.25.5
+)
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

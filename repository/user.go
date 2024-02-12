@@ -35,13 +35,13 @@ func (ur *userRepository) GetByUserName(c context.Context, username string) (dom
 	return user, err
 }
 
-func (ur *userRepository) GetByID(c context.Context, userID int) (domain.User, error) {
+func (ur *userRepository) GetByID(c context.Context, TelegramID int64) (domain.User, error) {
 	var user domain.User
-	err := ur.database.WithContext(c).Table(ur.table).Where("user_id = ?", userID).First(&user).Error
+	err := ur.database.WithContext(c).Table(ur.table).Where("telegram_id = ?", TelegramID).First(&user).Error
 	return user, err
 }
 
-func (ur *userRepository) GetOrCreateByUserID(c context.Context, user *domain.User) (domain.User, error) {
-	err := ur.database.WithContext(c).Table(ur.table).Where("user_id = ?", user.UserID).FirstOrCreate(user).Error
+func (ur *userRepository) GetOrCreateByUserTelegramID(c context.Context, user *domain.User) (domain.User, error) {
+	err := ur.database.WithContext(c).Table(ur.table).Where("telegram_id = ?", user.TelegramID).FirstOrCreate(user).Error
 	return *user, err
 }

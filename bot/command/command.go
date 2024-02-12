@@ -1,20 +1,23 @@
 package command
 
 import (
+	"log"
+
 	"github.com/41x3n/TeleUtil/bootstrap"
 	"github.com/41x3n/TeleUtil/domain"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 const (
-	CommandHelp  = "help"
-	CommandStart = "start"
+	HELP  = "help"
+	START = "start"
+	PHOTO = "photo"
 )
 
 func extractUserInfo(update *tgbotapi.Update) *domain.User {
 	user := update.Message.From
 	return &domain.User{
-		UserID:       user.ID,
+		TelegramID:   user.ID,
 		IsBot:        user.IsBot,
 		FirstName:    user.FirstName,
 		LastName:     &user.LastName,
@@ -24,14 +27,17 @@ func extractUserInfo(update *tgbotapi.Update) *domain.User {
 	}
 }
 
-func HandleCommand(update *tgbotapi.Update, msg *tgbotapi.MessageConfig, app *bootstrap.Application) {
-	command := update.Message.Command()
+func HandleCommand(command string, update *tgbotapi.Update, msg *tgbotapi.MessageConfig, app *bootstrap.Application) {
+	log.Println("Handling command", command)
 	user := extractUserInfo(update)
+
 	switch command {
-	case CommandHelp:
+	case HELP:
 		HelpCommand(update, user, msg, app)
-	case CommandStart:
+	case START:
 		StartCommand(update, user, msg, app)
+	case PHOTO:
+		PhotoCommand(update, user, msg, app)
 	default:
 		msg.Text = "I don't know that command"
 	}
