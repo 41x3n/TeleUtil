@@ -12,9 +12,7 @@ func NewPostgresDatabase(env *Env) *gorm.DB {
 	dsn := env.DSN
 
 	client, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database: ", err)
-	}
+	failOnError(err, "Failed to connect to PostgreSQL")
 
 	log.Println("Connection to PostgreSQL established.")
 
@@ -23,23 +21,17 @@ func NewPostgresDatabase(env *Env) *gorm.DB {
 
 func AutoMigrate(client *gorm.DB) {
 	err := client.AutoMigrate(&domain.User{}, &domain.Photo{})
-	if err != nil {
-		panic("Failed to auto migrate: " + err.Error())
-	}
+	failOnError(err, "Failed to auto migrate the database")
 
 	log.Println("Auto migration completed.")
 }
 
 func ClosePostgresDBConnection(client *gorm.DB) {
 	sqlDB, err := client.DB()
-	if err != nil {
-		log.Fatal("Failed to get SQL DB: ", err)
-	}
+	failOnError(err, "Failed to get database connection")
 
 	err = sqlDB.Close()
-	if err != nil {
-		log.Fatal("Failed to close database connection: ", err)
-	}
+	failOnError(err, "Failed to close the connection to PostgreSQL")
 
 	log.Println("Connection to PostgreSQL closed.")
 }

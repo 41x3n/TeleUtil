@@ -10,6 +10,7 @@ type Env struct {
 	AppEnv           string `mapstructure:"APP_ENV"`
 	DSN              string `mapstructure:"DSN"`
 	TelegramBotToken string `mapstructure:"TELEGRAM_BOT_TOKEN"`
+	RabbitMQURL      string `mapstructure:"RABBITMQ_URL"`
 }
 
 func NewEnv() *Env {

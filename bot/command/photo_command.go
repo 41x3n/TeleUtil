@@ -11,7 +11,7 @@ import (
 func PhotoCommand(update *tgbotapi.Update, user *domain.User, msg *tgbotapi.MessageConfig, app *bootstrap.Application) {
 	pr := repository.NewPhotoRepository(app.Postgres, domain.TablePhoto)
 	pc := controller.NewPhotoController(pr)
-	if err := pc.Run(update, user); err != nil {
+	if err := pc.Run(update, user, app); err != nil {
 		msg.Text = "Something wrong happened"
 		return
 	}
